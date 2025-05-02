@@ -19,3 +19,49 @@ Build compliant forms with Kenyan payment and SMS integrations. Supports M-Pesa,
 
 ```bash
 npm install @interfacelab/sdk
+
+Configuration 🔑
+
+
+Create .env file:
+# M-Pesa (From Safaricom Developer Portal)
+MPESA_CONSUMER_KEY=your_consumer_key
+MPESA_CONSUMER_SECRET=your_consumer_secret
+MPESA_SHORTCODE=123456
+MPESA_PASSKEY=your_passkey
+
+# Flutterwave (From Dashboard)
+FLW_PUBLIC_KEY=FLWPUBK-XXXX
+FLW_SECRET_KEY=FLWSECK-XXXX
+
+# Africa's Talking
+AT_API_KEY=your_api_key
+AT_USERNAME=interfacelab
+
+Quickstart 🚀
+
+1. Form with SMS Notification
+import { FormBuilder, ATSmsService } from '@interfacelab/sdk';
+
+const formConfig = {
+  fields: [
+    { name: 'phone', type: 'tel', label: 'M-Pesa Number', required: true },
+    { name: 'amount', type: 'number', label: 'Amount (KES)', min: 10 }
+  ]
+};
+
+function OrderForm() {
+  const handleSubmit = async (data) => {
+    // Send SMS confirmation
+    const sms = new ATSmsService();
+    await sms.send({
+      to: data.phone,
+      message: `Order of KES ${data.amount} received!`
+    });
+  };
+
+  return <FormBuilder config={formConfig} onSubmit={handleSubmit} />;
+}
+
+
+
