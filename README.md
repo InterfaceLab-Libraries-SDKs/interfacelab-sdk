@@ -145,4 +145,4 @@ const encrypted = encryptField('password123');
 * **Payment Modules**: Commercial License
 
 Need Help? Contact [support@interfacelab.co.ke](mailto:support@interfacelab.co.ke)
-**Developer Docs**: [https://developer.interfacelab.co.ke](https://developer.interfacelab.co.ke)
+<!-- **Developer Docs**: [https://developer.interfacelab.co.ke](https://developer.interfacelab.co.ke) -->
