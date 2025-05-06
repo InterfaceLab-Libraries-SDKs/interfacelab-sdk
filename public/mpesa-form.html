@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MPesa Payment</title>
+    <style>
+        .payment-form {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form class="payment-form" id="mpesaForm">
+        <h2>Make Payment</h2>
+        
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="2547XXXXXXXX" required>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Amount (KES):</label>
+            <input type="number" id="amount" name="amount" required>
+        </div>
+
+        <button type="submit">Pay via MPesa</button>
+        
+        <div id="response" style="margin-top: 1rem;"></div>
+    </form>
+
+    <script>
+        document.getElementById('mpesaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                phone: document.getElementById('phone').value,
+                amount: document.getElementById('amount').value
+            };
+
+            try {
+                const response = await fetch('initiate-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('response').innerHTML = `
+                        <p style="color: green;">Success: ${result.message}</p>
+                        <p>Transaction ID: ${result.transactionId}</p>
+                    `;
+                } else {
+                    document.getElementById('response').innerHTML = `
+                        <p style="color: red;">Error: ${result.error}</p>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('response').innerHTML = `
+                    <p style="color: red;">Network Error: Please try again</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
